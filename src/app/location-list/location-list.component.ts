@@ -14,9 +14,8 @@ export class LocationListComponent implements OnInit {
     password: ''
   };
   user: any;
-  auth_token = '';
+  auth_token: string;
   locations: Locations = {} as Locations;
-
 
   constructor(private sharedService: SharedService, private apiService: ApiService) {
     this.login = this.sharedService.login;
@@ -25,17 +24,25 @@ export class LocationListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.apiService.getLocations(this.auth_token).subscribe(locations => {
-      console.log('getLocations');
-      console.log('Locations:' + locations);
-      console.log('Data:' + locations.data);
-      console.log('Limit:' + locations.limit);
-      this.locations = locations;
-      console.log('Locations:' + this.locations);
-      console.log('Data:' + this.locations.data);
-      console.log('Limit:' + this.locations.limit);
-    //   console.log('Locations:' + locations.data);
-    //   this.locations = locations;
-    });
+    this.getLocations();
+  }
+
+  getLocations(): void {
+    console.log("LocationListComponent getLocations")
+    console.log("this.auth_token: " + this.auth_token)
+    this.apiService.getLocations(this.auth_token)
+      .subscribe(locations => this.locations = locations);
+  }
+
+  add(x: string, y: string): void {
+    console.log("LocationListComponent add")
+    console.log("this.auth_token: " + this.auth_token)
+    this.apiService.addLocation(this.auth_token, Number(x), Number(x)).subscribe();
+  }
+
+  delete(id: string): void {
+    console.log("LocationListComponent delete")
+    console.log("this.auth_token: " + this.auth_token)
+    this.apiService.deleteLocation(this.auth_token, Number(id)).subscribe();
   }
 }

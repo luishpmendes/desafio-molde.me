@@ -30,15 +30,29 @@ export class ApiService {
     );
   }
 
-  addLocation(x: number, y: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/location`, { x, y });
+  addLocation(auth_token: string, x: number, y: number): Observable<any> {
+    console.log("ApiService addLocation");
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': auth_token})
+    };
+    return this.http.post(`${this.apiUrl}/location`, { x, y }, httpOptions).pipe(
+      tap(response => console.log(response))
+    );
   }
 
-  updateLocation(id: number, x: number, y: number): Observable<any> {
+  updateLocation(auth_token: string, id: number, x: number, y: number): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': auth_token})
+    };
     return this.http.put(`${this.apiUrl}/location/${id}`, { x, y });
   }
 
-  deleteLocation(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/location/${id}`);
+  deleteLocation(auth_token: string, id: number): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': auth_token})
+    };
+    return this.http.delete(`${this.apiUrl}/location/${id}`, httpOptions).pipe(
+      tap(response => console.log(response))
+    );
   }
 }
