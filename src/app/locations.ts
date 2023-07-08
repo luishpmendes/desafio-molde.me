@@ -1,5 +1,7 @@
+import { Location } from './location';
+
 export interface Locations {
-  data: any[];
+  data: Location[];
   limit: number;
   page: number;
   pages: number;

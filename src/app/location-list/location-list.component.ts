@@ -37,12 +37,16 @@ export class LocationListComponent implements OnInit {
   add(x: string, y: string): void {
     console.log("LocationListComponent add")
     console.log("this.auth_token: " + this.auth_token)
-    this.apiService.addLocation(this.auth_token, Number(x), Number(x)).subscribe();
+    this.apiService.addLocation(this.auth_token, Number(x), Number(x))
+      .subscribe(location => {
+        this.locations.data.push(location);
+      });
   }
 
-  delete(id: string): void {
+  delete(id: number): void {
     console.log("LocationListComponent delete")
     console.log("this.auth_token: " + this.auth_token)
-    this.apiService.deleteLocation(this.auth_token, Number(id)).subscribe();
+    this.locations.data = this.locations.data.filter(l => l.id !== id);
+    this.apiService.deleteLocation(this.auth_token, id).subscribe();
   }
 }
