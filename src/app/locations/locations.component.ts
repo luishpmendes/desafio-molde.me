@@ -52,6 +52,7 @@ export class LocationListComponent implements OnInit {
   }
 
   tsp(): void {
+    this.sharedService.locations = this.locations;
     this.router.navigate(['/tsp']);
   }
 }
