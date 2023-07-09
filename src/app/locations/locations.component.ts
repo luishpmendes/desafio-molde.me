@@ -4,9 +4,9 @@ import { SharedService } from '../shared.service';
 import { Locations } from '../locations';
 
 @Component({
-  selector: 'app-location-list',
-  templateUrl: './location-list.component.html',
-  styleUrls: ['./location-list.component.css']
+  selector: 'app-locations',
+  templateUrl: './locations.component.html',
+  styleUrls: ['./locations.component.css']
 })
 export class LocationListComponent implements OnInit {
   login = {
