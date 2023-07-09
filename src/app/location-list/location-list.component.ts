@@ -37,7 +37,7 @@ export class LocationListComponent implements OnInit {
   add(x: string, y: string): void {
     console.log("LocationListComponent add")
     console.log("this.auth_token: " + this.auth_token)
-    this.apiService.addLocation(this.auth_token, Number(x), Number(x))
+    this.apiService.addLocation(this.auth_token, Number(x), Number(y))
       .subscribe(location => {
         this.locations.data.push(location);
       });

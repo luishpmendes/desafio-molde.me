@@ -2,7 +2,7 @@
 <ul>
   <li *ngFor="let location of locations.data">
     ID: {{ location.id }}, X: {{ location.x }}, Y: {{ location.y }}
-    <button type="button" class="delete-button" (click)="delete(location.id);">x</button>
+    <button type="button" class="delete-button" title="Delete location" (click)="delete(location.id);">x</button>
   </li>
 </ul>
 <div>
@@ -12,7 +12,7 @@
   <input type="number" id="y" #y />
 
   <!-- (click) passes input value to add() and then clears the input -->
-  <button type="button" class="add-button" (click)="add(x.value, y.value); x.value=''; y.value='';">
+  <button type="button" class="add-button" title="Add location" (click)="add(x.value, y.value); x.value=''; y.value='';">
     Add Location
   </button>
 </div>
