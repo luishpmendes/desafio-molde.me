@@ -5,13 +5,15 @@
     <button type="button" class="delete-button" title="Delete location" (click)="delete(location.id);">x</button>
   </li>
 </ul>
+<button type="button" class="tsp-button" title="Calculate route" (click)="tsp();">Calculate route</button>
 <div>
+  <h3>New Location</h3>
   <label for="x">x: </label>
-  <input type="number" id="x" #x />
+  <input type="number" id="x" min="0" max="1000" #x />
+  <br />
   <label for="y">y: </label>
-  <input type="number" id="y" #y />
-
-  <!-- (click) passes input value to add() and then clears the input -->
+  <input type="number" id="y"  min="0" max="1000" #y />
+  <br />
   <button type="button" class="add-button" title="Add location" (click)="add(x.value, y.value); x.value=''; y.value='';">
     Add Location
   </button>
