@@ -46,8 +46,10 @@ export class BRKGA {
     // this.refRNG = refRNG;
     this.K = K;
     // this.MAX_THREADS = MAX_THREADS;
-    this.previous = new Array(K).fill(0);
-    this.current = new Array(K).fill(0);
+    this.previous = [];
+    this.current = [];
+    this.previous = new Array<Population>(K);
+    this.current = new Array<Population>(K);
 
     // Error check
     if (n == 0) {
@@ -83,7 +85,7 @@ export class BRKGA {
       this.current[i] = new Population(n, p);
       this.initialize(i);
       // this.previous[i] = new Population(this.current[i]);
-      this.previous[i] = structuredClone(this.current[i]);
+      this.previous[i] = new Population(n, p);
     }
   }
 
@@ -288,13 +290,13 @@ export class BRKGA {
     while(i < this.p - this.pm) {
       // Select an elite parent:
       // const eliteParent = this.refRNG.randInt(this.pe - 1);
-      const eliteParent = Math.random() * (this.pe - 1);
+      const eliteParent = Math.floor(Math.random() * (this.pe - 1));
       // Select a non-elite parent:
       // const noneliteParent = this.pe + this.refRNG.randInt(this.p - this.pe - 1);
-      const noneliteParent = this.pe + Math.random() * (this.p - this.pe - 1);
+      const noneliteParent = this.pe + Math.floor(Math.random() * (this.p - this.pe - 1));
 
       // Mate:
-      for(j = 0; j < this.n; ++j) {
+      for(j = 0; j < this.n; j++) {
         // const sourceParent = (this.refRNG.rand() < this.rhoe) ? eliteParent : noneliteParent;
         const sourceParent = (Math.random() < this.rhoe) ? eliteParent : noneliteParent;
         next.setAllele(i, j, curr.getAllele(curr.fitness[sourceParent].second, j));
