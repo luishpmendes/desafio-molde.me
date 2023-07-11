@@ -85,9 +85,13 @@ export class TSPComponent implements OnInit, AfterViewInit {
       .attr('dy', '-10px');
   }
 
-  tsp(gen : string, p : string, pe : string, pm : string, rho : string) : void {
+  tsp(timeLimit: string, maxGen : string, p : string, pe : string, pm : string, rho : string) : void {
     console.log("TspComponent tsp")
-    let result = this.tspService.solve(this.locations.data, Number(gen), Number(p), Number(pe), Number(pm), Number(rho));
+    if (Number(timeLimit) == 0 && Number(maxGen) == 0) {
+      alert("Either time limit or max generations must be greater than 0");
+      return;
+    }
+    let result = this.tspService.solve(this.locations.data, Number(timeLimit), Number(maxGen), Number(p), Number(pe), Number(pm), Number(rho));
     let solution = result[1];
     solution.push(solution[0]);
     const element = this.chartContainer.nativeElement;

@@ -10,12 +10,23 @@ export class TspService {
 
   constructor() { }
 
-  solve(locations : Location[], gen : number, p : number, pe : number, pm : number, rho : number) : [number, Location[]] {
+  static getElapsedTime(startTime : number) : number {
+    return (new Date().getTime() - startTime) / 1000;
+  }
+
+  static areTerminationCriteriaMet(startTime : number, timeLimit : number, gen : number, maxGen : number) : boolean {
+    return (timeLimit > 0 && TspService.getElapsedTime(startTime) >= timeLimit) || (maxGen > 0 && gen >= maxGen);
+  }
+
+  solve(locations : Location[], timeLimit : number, maxGen : number, p : number, pe : number, pm : number, rho : number) : [number, Location[]] {
+    let startTime = new Date().getTime();
     let decoder = new Decoder(locations);
     let algorithm = new BRKGA(locations.length - 1, p, pe, pm, rho, decoder);
+    let gen = 0;
 
-    for (let i = 0; i < gen; i++) {
+    while (!TspService.areTerminationCriteriaMet(startTime, timeLimit, gen, maxGen)) {
       algorithm.evolve();
+      gen++;
     }
 
     return [algorithm.getBestFitness(), decoder.getSolution(algorithm.getBestChromosome())];
