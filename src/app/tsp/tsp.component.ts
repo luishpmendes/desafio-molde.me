@@ -17,6 +17,7 @@ export class TSPComponent implements OnInit, AfterViewInit {
 
   auth_token: string;
   locations: Locations = {} as Locations;
+  routeLength: number = 0;
 
   constructor(private sharedService: SharedService, private apiService: ApiService, private tspService: TspService) {
     this.auth_token = this.sharedService.auth_token;
@@ -87,6 +88,7 @@ export class TSPComponent implements OnInit, AfterViewInit {
     }
 
     let result = this.tspService.solve(this.locations.data, Number(timeLimit), Number(maxGen), Number(p), Number(pe), Number(pm), Number(rho));
+    this.routeLength = result[0];
     let solution = result[1];
     solution.push(solution[0]);
 

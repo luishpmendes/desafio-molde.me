@@ -19,3 +19,6 @@
 <br />
 <button type="button" class="tsp-button" title="Calculate route" (click)="tsp(timeLimit.value, maxGen.value, p.value, pe.value, pm.value, rho.value);">Calculate route</button>
 <div #chart></div>
+<div *ngIf="routeLength > 0">
+  Route length: {{ routeLength }}
+</div>
