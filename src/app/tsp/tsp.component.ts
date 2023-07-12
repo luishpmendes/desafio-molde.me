@@ -18,6 +18,8 @@ export class TSPComponent implements OnInit, AfterViewInit {
   auth_token: string;
   locations: Locations = {} as Locations;
   routeLength: number = 0;
+  elapsedTime: number = 0;
+  gen: number = 0;
 
   constructor(private sharedService: SharedService, private apiService: ApiService, private tspService: TspService) {
     this.auth_token = this.sharedService.auth_token;
@@ -93,6 +95,8 @@ export class TSPComponent implements OnInit, AfterViewInit {
     this.routeLength = result[0];
     let solution = result[1];
     solution.push(solution[0]);
+    this.elapsedTime = result[2];
+    this.gen = result[3];
 
     const element = this.chartContainer.nativeElement;
     const data = solution.map(location => ({ id: location.id, x: location.x, y: location.y }));

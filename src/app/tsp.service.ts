@@ -24,7 +24,7 @@ export class TspService {
     return false;
   }
 
-  solve(locations : Location[], timeLimit : number, maxGen : number, p : number, pe : number, pm : number, rho : number, maxLocalSearchImprov : number) : [number, Location[]] {
+  solve(locations : Location[], timeLimit : number, maxGen : number, p : number, pe : number, pm : number, rho : number, maxLocalSearchImprov : number) : [number, Location[], number, number] {
     let startTime = new Date().getTime();
     let decoder = new Decoder(locations, maxLocalSearchImprov, startTime, timeLimit);
     let algorithm = new BRKGA(locations.length - 1, p, pe, pm, rho, decoder);
@@ -35,6 +35,8 @@ export class TspService {
       gen++;
     }
 
-    return [algorithm.getBestFitness(), decoder.getSolution(algorithm.getBestChromosome())];
+    let elapsedTime = (new Date().getTime() - startTime) / 1000;
+
+    return [algorithm.getBestFitness(), decoder.getSolution(algorithm.getBestChromosome()), elapsedTime, gen];
   }
 }

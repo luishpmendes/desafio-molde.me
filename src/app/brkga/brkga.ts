@@ -257,7 +257,8 @@ export class BRKGA {
     // });
     // await Promise.all(promises);
     for(let j = 0; j < this.p; j++) {
-      this.current[i].setFitness(j, this.refDecoder.decode(this.current[i].getChromosome(j)));
+      // this.current[i].setFitness(j, this.refDecoder.decode(this.current[i].getChromosome(j)));
+      this.current[i].setFitness(j, this.refDecoder.decode(this.current[i].population[j]));
     }
 
     // Sort:
