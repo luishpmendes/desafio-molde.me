@@ -52,31 +52,31 @@ export class BRKGA {
     this.current = new Array<Population>(K);
 
     // Error check
-    if (n == 0) {
+    if (this.n == 0) {
       throw new RangeError("Chromosome size equals zero.");
     }
 
-    if (p == 0) {
+    if (this.p == 0) {
       throw new RangeError("Population size equals zero.");
     }
 
-    if (pe == 0) {
+    if (this.pe == 0) {
       throw new RangeError("Elite-set size equals zero.");
     }
 
-    if (pe > p) {
+    if (this.pe > this.p) {
       throw new RangeError("Elite-set size greater than population size (pe > p).");
     }
 
-    if (pm > p) {
+    if (this.pm > this.p) {
       throw new RangeError("Mutant-set size greater than population size (pm > p).");
     }
 
-    if (pe + pm > p) {
+    if (this.pe + this.pm > this.p) {
       throw new RangeError("elite + mutant sets greater than population size (pe + pm > p).");
     }
 
-    if (K == 0) {
+    if (this.K == 0) {
       throw new RangeError("Number of parallel populations cannot be zero.");
     }
 

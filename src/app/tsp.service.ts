@@ -10,17 +10,23 @@ export class TspService {
 
   constructor() { }
 
-  static getElapsedTime(startTime : number) : number {
-    return (new Date().getTime() - startTime) / 1000;
-  }
-
   static areTerminationCriteriaMet(startTime : number, timeLimit : number, gen : number, maxGen : number) : boolean {
-    return (timeLimit > 0 && TspService.getElapsedTime(startTime) >= timeLimit) || (maxGen > 0 && gen >= maxGen);
+    let elapsedTime = (new Date().getTime() - startTime) / 1000;
+
+    if (timeLimit > 0 && elapsedTime >= timeLimit) {
+      return true;
+    }
+
+    if (maxGen > 0 && gen >= maxGen) {
+      return true;
+    }
+    
+    return false;
   }
 
-  solve(locations : Location[], timeLimit : number, maxGen : number, p : number, pe : number, pm : number, rho : number) : [number, Location[]] {
+  solve(locations : Location[], timeLimit : number, maxGen : number, p : number, pe : number, pm : number, rho : number, maxLocalSearchImprov : number) : [number, Location[]] {
     let startTime = new Date().getTime();
-    let decoder = new Decoder(locations);
+    let decoder = new Decoder(locations, maxLocalSearchImprov, startTime, timeLimit);
     let algorithm = new BRKGA(locations.length - 1, p, pe, pm, rho, decoder);
     let gen = 0;
 

@@ -53,7 +53,7 @@ export class TSPComponent implements OnInit, AfterViewInit {
 
     const y = d3.scaleLinear()
       .domain([0, 1000])
-      .range([0, 500]);
+      .range([500, 0]);
 
     const line = d3.line<any>()
       .x(d => x(d.x))
@@ -79,7 +79,7 @@ export class TSPComponent implements OnInit, AfterViewInit {
       .attr('dy', '-10px');
   }
 
-  tsp(timeLimit: string, maxGen : string, p : string, pe : string, pm : string, rho : string) : void {
+  tsp(timeLimit: string, maxGen : string, p : string, pe : string, pm : string, rho : string, maxLocalSearchImprov : string) : void {
     console.log("TspComponent tsp")
 
     if (Number(timeLimit) == 0 && Number(maxGen) == 0) {
@@ -87,7 +87,9 @@ export class TSPComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    let result = this.tspService.solve(this.locations.data, Number(timeLimit), Number(maxGen), Number(p), Number(pe), Number(pm), Number(rho));
+    this.routeLength = 0;
+    let result = this.tspService.solve(this.locations.data, Number(timeLimit), Number(maxGen), Number(p), Number(pe), Number(pm), Number(rho), Number(maxLocalSearchImprov));
+    console.log("result[0]: " + result[0]);
     this.routeLength = result[0];
     let solution = result[1];
     solution.push(solution[0]);
@@ -107,7 +109,7 @@ export class TSPComponent implements OnInit, AfterViewInit {
 
     const y = d3.scaleLinear()
       .domain([0, 1000])
-      .range([0, 500]);
+      .range([500, 0]);
 
     const line = d3.line<any>()
       .x(d => x(d.x))
