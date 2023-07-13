@@ -24,10 +24,7 @@ export class LoginComponent {
 
   onSubmit(): void {
     this.apiService.login(this.login).subscribe(result => {
-      console.log('Login result:');
-      console.log(result);
       if (result) {
-        console.log('Login successful');
         this.user = result.user;
         this.sharedService.user = result.user;
         this.auth_token = result.auth_token;
@@ -35,7 +32,6 @@ export class LoginComponent {
         this.router.navigate(['/locations']);
       } else {
         // Login failed
-        console.log('Login failed');
         this.user = undefined;
         this.sharedService.user = undefined;
         this.auth_token = '';

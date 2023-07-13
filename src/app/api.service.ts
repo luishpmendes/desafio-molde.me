@@ -13,8 +13,6 @@ export class ApiService {
   constructor(private http: HttpClient) { }
 
   login(login: { email: string, password: string }): Observable<any> {
-    console.log('email:' + login.email);
-    console.log('password:' + login.password);
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' })
     };
@@ -25,19 +23,14 @@ export class ApiService {
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': auth_token})
     };
-    return this.http.get<Locations>(`${this.apiUrl}/location`, httpOptions).pipe(
-      tap(response => console.log(response))
-    );
+    return this.http.get<Locations>(`${this.apiUrl}/location`, httpOptions);
   }
 
   addLocation(auth_token: string, x: number, y: number): Observable<any> {
-    console.log("ApiService addLocation");
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': auth_token})
     };
-    return this.http.post(`${this.apiUrl}/location`, { x, y }, httpOptions).pipe(
-      tap(response => console.log(response))
-    );
+    return this.http.post(`${this.apiUrl}/location`, { x, y }, httpOptions);
   }
 
   updateLocation(auth_token: string, id: number, x: number, y: number): Observable<any> {
@@ -51,8 +44,6 @@ export class ApiService {
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': auth_token})
     };
-    return this.http.delete(`${this.apiUrl}/location/${id}`, httpOptions).pipe(
-      tap(response => console.log(response))
-    );
+    return this.http.delete(`${this.apiUrl}/location/${id}`, httpOptions);
   }
 }

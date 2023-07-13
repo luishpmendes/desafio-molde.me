@@ -35,8 +35,6 @@ export class TSPComponent implements OnInit, AfterViewInit {
   }
 
   getLocations(): void {
-    console.log("TspComponent getLocations")
-    console.log("this.auth_token: " + this.auth_token)
     this.apiService.getLocations(this.auth_token)
       .subscribe(locations => this.locations = locations);
   }
@@ -82,8 +80,6 @@ export class TSPComponent implements OnInit, AfterViewInit {
   }
 
   tsp(timeLimit: string, maxGen : string, p : string, pe : string, pm : string, rho : string, maxLocalSearchImprov : string, warmStart : boolean) : void {
-    console.log("TspComponent tsp")
-
     if (Number(timeLimit) == 0 && Number(maxGen) == 0) {
       alert("Either time limit or max generations must be greater than 0");
       return;
@@ -91,7 +87,6 @@ export class TSPComponent implements OnInit, AfterViewInit {
 
     this.routeLength = 0;
     let result = this.tspService.solve(this.locations.data, Number(timeLimit), Number(maxGen), Number(p), Number(pe), Number(pm), Number(rho), Number(maxLocalSearchImprov), warmStart);
-    console.log("result[0]: " + result[0]);
     this.routeLength = result[0];
     let solution = result[1];
     solution.push(solution[0]);

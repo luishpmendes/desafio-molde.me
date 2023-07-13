@@ -111,7 +111,6 @@ export class TspService {
   }
 
   private static mst2Approx(n : number, edges : [number, [number, number]][]) : number[] {
-    console.log("Entering mst2Approx")
     let circuit : number[] = Array();
     let adjMST : number[][] = TspService.kruskal(n, edges);
     let curr_path : number[] = Array();
