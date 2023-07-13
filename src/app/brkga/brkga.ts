@@ -331,6 +331,25 @@ export class BRKGA {
     next.sortFitness();
   }
 
+  injectChromosomes(chromosomes: Array<Array<number>>, populationIndex: number) {
+    if (populationIndex < 0 || populationIndex >= this.K) {
+      throw new Error("Invalid population index");
+    }
+
+    for (let chromosome of chromosomes) {
+      if (chromosome.length != this.n) {
+        throw new Error("Wrong chromosome size");
+      }
+    }
+
+    for (let i = 0; i < chromosomes.length; i++) {
+      this.current[populationIndex].population[this.p - 1 - i] = chromosomes[i];
+      this.current[populationIndex].setFitness(this.p - 1 - i, this.refDecoder.decode(this.current[populationIndex].population[this.p - 1 - i]));
+    }
+
+    this.current[populationIndex].sortFitness();
+  }
+
   // private isRepeated(chrA: any[], chrB: any[]): boolean {
   //     // Check if chromosome is repeated
   //     ...

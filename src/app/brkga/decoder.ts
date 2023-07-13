@@ -10,23 +10,13 @@ export class Decoder {
   private cycle: number[];
   private indexes: number[];
 
-  public constructor(locations: Location[], maxLocalSearchImprov: number, startTime: number, timeLimit: number) {
+  public constructor(locations: Location[], dist: number[][], maxLocalSearchImprov: number, startTime: number, timeLimit: number) {
     this.locations = locations;
     this.maxLocalSearchImprov = maxLocalSearchImprov;
     this.startTime = startTime;
     this.timeLimit = timeLimit;
 
-    this.dist = Array(locations.length);
-
-    for(let i = 0; i < this.dist.length; i++) {
-      this.dist[i] = Array(locations.length);
-    }
-
-    for(let i = 0; i < locations.length; i++) {
-      for(let j = 0; j < locations.length; j++) {
-        this.dist[i][j] = Math.sqrt((locations[i].x - locations[j].x)*(locations[i].x - locations[j].x) + (locations[i].y - locations[j].y)*(locations[i].y - locations[j].y));
-      }
-    }
+    this.dist = dist
 
     this.permutation = Array(locations.length - 1);
     this.cycle = Array(locations.length);
@@ -52,7 +42,7 @@ export class Decoder {
     let foundImprov = true;
     let elapsedTime = (new Date().getTime() - startTime) / 1000;
 
-    while (foundImprov && (maxLocalSearchImprov == 0 || numImprov < maxLocalSearchImprov) && elapsedTime < timeLimit) {
+    while (foundImprov && numImprov < maxLocalSearchImprov && elapsedTime < timeLimit) {
       foundImprov = false;
       Decoder.shuffle(indexes);
 
@@ -167,6 +157,10 @@ export class Decoder {
 
   static encodeNewChromosome(cycle : number[]) : Array<number> {
     let chromosome = Array(cycle.length - 1);
+
+    for (let i = 0; i < chromosome.length; i++) {
+      chromosome[i] = Math.random();
+    }
 
     Decoder.encodeWithoutPermutation(cycle, chromosome);
 

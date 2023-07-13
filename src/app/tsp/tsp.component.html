@@ -1,9 +1,9 @@
 <h2>BRKGA parameters</h2>
 <label for="timeLimit">Time limit: </label>
-<input type="number" id="timeLimit" min="0" value="600" #timeLimit /> s
+<input type="number" id="timeLimit" min="0" value="600" #timeLimit /> s (0 means no limit)
 <br />
 <label for="maxGen">Maximum generations: </label>
-<input type="number" id="maxGen" min="0" value="5000" #maxGen />
+<input type="number" id="maxGen" min="0" value="5000" #maxGen /> (0 means no limit)
 <br />
 <label for="population">Population size: </label>
 <input type="number" id="population" min="0" value="250" #p />
@@ -20,7 +20,10 @@
 <label for="maxLocalSearchImprov">Maximum local search improvments: </label>
 <input type="number" id="maxLocalSearchImprov" min="0" value="20" #maxLocalSearchImprov />
 <br />
-<button type="button" class="tsp-button" title="Calculate route" (click)="tsp(timeLimit.value, maxGen.value, p.value, pe.value, pm.value, rho.value, maxLocalSearchImprov.value);">Calculate route</button>
+<label for="warmStart">Warm start: </label>
+<input type="checkbox" id="warmStart" checked #warmStart />
+<br />
+<button type="button" class="tsp-button" title="Calculate route" (click)="tsp(timeLimit.value, maxGen.value, p.value, pe.value, pm.value, rho.value, maxLocalSearchImprov.value, warmStart.checked);">Calculate route</button>
 <div #chart></div>
 <div *ngIf="routeLength > 0">
   Route length: {{ routeLength }} <br />

@@ -81,7 +81,7 @@ export class TSPComponent implements OnInit, AfterViewInit {
       .attr('dy', '-10px');
   }
 
-  tsp(timeLimit: string, maxGen : string, p : string, pe : string, pm : string, rho : string, maxLocalSearchImprov : string) : void {
+  tsp(timeLimit: string, maxGen : string, p : string, pe : string, pm : string, rho : string, maxLocalSearchImprov : string, warmStart : boolean) : void {
     console.log("TspComponent tsp")
 
     if (Number(timeLimit) == 0 && Number(maxGen) == 0) {
@@ -90,7 +90,7 @@ export class TSPComponent implements OnInit, AfterViewInit {
     }
 
     this.routeLength = 0;
-    let result = this.tspService.solve(this.locations.data, Number(timeLimit), Number(maxGen), Number(p), Number(pe), Number(pm), Number(rho), Number(maxLocalSearchImprov));
+    let result = this.tspService.solve(this.locations.data, Number(timeLimit), Number(maxGen), Number(p), Number(pe), Number(pm), Number(rho), Number(maxLocalSearchImprov), warmStart);
     console.log("result[0]: " + result[0]);
     this.routeLength = result[0];
     let solution = result[1];
