@@ -22,8 +22,6 @@ export class Population {
       throw new RangeError("Chromosome size n cannot be zero.");
     }
 
-    // this.population = Array(p).fill(Array(n).fill(0));
-    // this.fitness = Array(p).fill({first: 0, second: 0});
     this.population = Array(p);
     this.fitness = Array(p);
 

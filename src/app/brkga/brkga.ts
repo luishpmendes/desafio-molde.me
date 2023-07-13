@@ -25,8 +25,6 @@ export class BRKGA {
 
   // number of independent parallel populations
   K: number;
-  // number of threads for parallel decoding
-  // MAX_THREADS: number;
   
   // Data:
 
@@ -232,16 +230,6 @@ export class BRKGA {
     return this.K;
   }
 
-  // getMAX_THREADS(): number {
-  //   return this.MAX_THREADS;
-  // }
-
-  // private initialize(i: number) {
-  //     // Initialize current population 'i' with random keys
-  //     ...
-  // }
-
-  // async initialize(i: number): Promise<void> {
   initialize(i: number): void {
     for(let j = 0; j < this.p; j++) {
       for(let k = 0; k < this.n; k++) { 
@@ -251,13 +239,7 @@ export class BRKGA {
     }
 
     // Decode:
-    // Simulating parallel execution with Promise.all
-    // const promises = Array(this.p).fill(0).map(async (_, j) => {
-    //   this.current[i].setFitness(j, this.refDecoder.decode(this.current[i].getChromosome(j)));
-    // });
-    // await Promise.all(promises);
     for(let j = 0; j < this.p; j++) {
-      // this.current[i].setFitness(j, this.refDecoder.decode(this.current[i].getChromosome(j)));
       this.current[i].setFitness(j, this.refDecoder.decode(this.current[i].population[j]));
     }
 
@@ -265,12 +247,6 @@ export class BRKGA {
     this.current[i].sortFitness();
   }
 
-  // private evolution(curr: any, next: any) {
-  //     // Evolution operations
-  //     ...
-  // }
-
-  // async evolution(curr: Population, next: Population): Promise<void> {
   evolution(curr: Population, next: Population): void {
     // We now will set every chromosome of 'current', iterating with 'i':
     let i = 0; // Iterate chromosome by chromosome
@@ -290,15 +266,12 @@ export class BRKGA {
     // 3. We'll mate 'p - pe - pm' pairs; initially, i = pe, so we need to iterate until i < p - pm:
     while(i < this.p - this.pm) {
       // Select an elite parent:
-      // const eliteParent = this.refRNG.randInt(this.pe - 1);
       const eliteParent = Math.floor(Math.random() * (this.pe - 1));
       // Select a non-elite parent:
-      // const noneliteParent = this.pe + this.refRNG.randInt(this.p - this.pe - 1);
       const noneliteParent = this.pe + Math.floor(Math.random() * (this.p - this.pe - 1));
 
       // Mate:
       for(j = 0; j < this.n; j++) {
-        // const sourceParent = (this.refRNG.rand() < this.rhoe) ? eliteParent : noneliteParent;
         const sourceParent = (Math.random() < this.rhoe) ? eliteParent : noneliteParent;
         next.setAllele(i, j, curr.getAllele(curr.fitness[sourceParent].second, j));
       }
@@ -309,20 +282,13 @@ export class BRKGA {
     // We'll introduce 'pm' mutants:
     while(i < this.p) {
       for(j = 0; j < this.n; ++j) {
-        // next.setAllele(i, j, this.refRNG.rand());
         next.setAllele(i, j, Math.random());
       }
 
       i++;
     }
 
-    // Time to compute fitness, in parallel:
-    // Simulating parallel execution with Promise.all
-    // const promises = Array(this.p - this.pe).fill(0).map(async (_, idx) => {
-    //   const k = idx + this.pe;
-    //   next.setFitness(k, this.refDecoder.decode(next.population[k]));
-    // });
-    // await Promise.all(promises);
+    // Time to compute fitness:
     for (i = this.pe; i < this.p; i++) {
       next.setFitness(i, this.refDecoder.decode(next.population[i]));
     }
@@ -349,9 +315,4 @@ export class BRKGA {
 
     this.current[populationIndex].sortFitness();
   }
-
-  // private isRepeated(chrA: any[], chrB: any[]): boolean {
-  //     // Check if chromosome is repeated
-  //     ...
-  // }
 }
