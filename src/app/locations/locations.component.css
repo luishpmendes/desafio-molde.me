@@ -1,0 +1,95 @@
+h2, h3 {
+  color: #444;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0px 0px 5px 0px #888888;
+}
+
+table, th, td {
+  padding: 15px;
+  text-align: left;
+}
+
+th {
+  background-color: #536DFE;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #eeeeee;
+}
+
+tr:hover {
+  background-color: #ddd;
+}
+
+.delete-button, .tsp-button, .add-button {
+  border: none;
+  border-radius: 3px;
+  padding: 10px 20px;
+  margin: 10px 0;
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  width: 100%;
+  transition: 0.3s;
+}
+
+.delete-button {
+  background-color: #FF5252;
+}
+
+.tsp-button {
+  background-color: #536DFE;
+}
+
+.add-button {
+  background-color: #00E676;
+}
+
+.delete-button:hover, .tsp-button:hover, .add-button:hover {
+  transform: scale(1.05);
+}
+
+.add-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* input[type=number] {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0 22px 0;
+  border: none;
+  background: #eeeeee;
+  border-radius: 3px;
+} */
+
+/* input[type=number]:focus {
+  background-color: #ddd;
+  outline: none;
+} */
+
+/* form {
+  padding: 10px;
+  margin-bottom: 20px;
+  background-color: white;
+  box-shadow: 0px 0px 5px 0px #888888;
+} */
+
+section {
+  margin: 20px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px 0px #888888;
+}
+
+/* * {
+  box-sizing: border-box;
+} */

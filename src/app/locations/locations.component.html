@@ -1,20 +1,53 @@
-<h2>Locations</h2>
-<ul>
-  <li *ngFor="let location of locations.data">
-    ID: {{ location.id }}, X: {{ location.x }}, Y: {{ location.y }}
-    <button type="button" class="delete-button" title="Delete location" (click)="delete(location.id);">x</button>
-  </li>
-</ul>
-<button type="button" class="tsp-button" title="Calculate route" (click)="tsp();">Calculate route</button>
-<div>
+<section aria-label="Location Data">
+  <h2>Locations</h2>
+
+  <ng-container *ngIf="locations?.data as locationData; else noLocations">
+    <table>
+      <caption class="sr-only">Locations data table</caption>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>X</th>
+          <th>Y</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let location of locations?.data; trackBy: trackById">
+          <td>{{ location.id }}</td>
+          <td>{{ location.x }}</td>
+          <td>{{ location.y }}</td>
+          <td>
+            <button type="button" class="delete-button" aria-label="Delete location" (click)="delete(location.id);">
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <button type="button" class="tsp-button" aria-label="Calculate route" (click)="tsp();">
+      Calculate route
+    </button>
+  </ng-container>
+
+  <ng-template #noLocations>
+    <p>No locations found</p>
+  </ng-template>
+</section>
+
+<section aria-label="Add Location">
   <h3>New Location</h3>
-  <label for="x">x: </label>
-  <input type="number" id="x" min="0" max="1000" #x />
-  <br />
-  <label for="y">y: </label>
-  <input type="number" id="y"  min="0" max="1000" #y />
-  <br />
-  <button type="button" class="add-button" title="Add location" (click)="add(x.value, y.value); x.value=''; y.value='';">
-    Add Location
-  </button>
-</div>
+  
+  <form [formGroup]="addLocationForm" (ngSubmit)="add()">
+    <label for="x">X:</label>
+    <input type="number" id="x" min="0" max="1000" formControlName="x" />
+
+    <label for="y">Y:</label>
+    <input type="number" id="y" min="0" max="1000" formControlName="y" />
+
+    <button type="submit" class="add-button" aria-label="Add location" [disabled]="addLocationForm.invalid">
+      Add Location
+    </button>
+  </form>
+</section>

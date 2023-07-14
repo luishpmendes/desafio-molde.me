@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import { SharedService } from '../shared.service';
-import { Locations } from '../locations';
+import { Location } from '../location';
 import { Router } from '@angular/router';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+
+const LOCATION_FORM_VALIDATORS = [Validators.required, Validators.min(0), Validators.max(1000)];
 
 @Component({
   selector: 'app-locations',
@@ -10,18 +13,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./locations.component.css']
 })
 export class LocationListComponent implements OnInit {
-  login = {
-    email: '',
-    password: ''
-  };
-  user: any;
-  auth_token: string;
-  locations: Locations = {} as Locations;
+  addLocationForm: FormGroup = {} as FormGroup;
 
   constructor(private sharedService: SharedService, private apiService: ApiService, private readonly router: Router) {
-    this.login = this.sharedService.login;
-    this.user = this.sharedService.user;
-    this.auth_token = this.sharedService.auth_token;
+    this.addLocationForm = new FormGroup({
+      x: new FormControl('', LOCATION_FORM_VALIDATORS),
+      y: new FormControl('', LOCATION_FORM_VALIDATORS)
+    });
   }
 
   ngOnInit(): void {
@@ -29,24 +27,48 @@ export class LocationListComponent implements OnInit {
   }
 
   getLocations(): void {
-    this.apiService.getLocations(this.auth_token)
-      .subscribe(locations => this.locations = locations);
-  }
-
-  add(x: string, y: string): void {
-    this.apiService.addLocation(this.auth_token, Number(x), Number(y))
-      .subscribe(location => {
-        this.locations.data.push(location);
+    this.apiService.getLocations(this.sharedService.auth_token)
+      .subscribe({
+        next: locations => this.sharedService.locations = locations,
+        error: error => console.error('There was an error!', error)
       });
   }
 
+  add(): void {
+    if (this.addLocationForm.valid) {
+      this.apiService.addLocation(this.sharedService.auth_token, this.addLocationForm.value.x, this.addLocationForm.value.y)
+        .subscribe({
+          next: location => this.addLocation(location),
+          error: error => console.error('There was an error!', error)
+        });
+    }
+  }
+
+  addLocation(location: any): void {
+    this.sharedService.locations.data.push(location);
+    this.addLocationForm.reset();
+  }
+
   delete(id: number): void {
-    this.locations.data = this.locations.data.filter(l => l.id !== id);
-    this.apiService.deleteLocation(this.auth_token, id).subscribe();
+    this.apiService.deleteLocation(this.sharedService.auth_token, id).subscribe({
+      next: result => this.filterLocations(id),
+      error: error => console.error('There was an error!', error)
+    });
+  }
+
+  filterLocations(id: number): void {
+    this.sharedService.locations.data = this.sharedService.locations.data.filter(l => l.id !== id)
   }
 
   tsp(): void {
-    this.sharedService.locations = this.locations;
     this.router.navigate(['/tsp']);
+  }
+
+  get locations() {
+    return this.sharedService.locations;
+  }
+
+  trackById(index: number, location: Location): number {
+    return location.id;
   }
 }

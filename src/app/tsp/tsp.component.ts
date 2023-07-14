@@ -1,9 +1,8 @@
 import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
-import { ApiService } from '../api.service';
 import { SharedService } from '../shared.service';
 import { Locations } from '../locations';
 import { TspService } from '../tsp.service';
-
+import { ScaleLinear, Selection, BaseType } from 'd3';
 import * as d3 from 'd3';
 
 @Component({
@@ -15,126 +14,86 @@ export class TSPComponent implements OnInit, AfterViewInit {
   @ViewChild('chart')
   private chartContainer!: ElementRef;
 
-  auth_token: string;
   locations: Locations = {} as Locations;
   routeLength: number = 0;
   elapsedTime: number = 0;
   gen: number = 0;
+  svg!: Selection<SVGSVGElement, unknown, null, any>;
+  x!: ScaleLinear<number, number>;
+  y!: ScaleLinear<number, number>;
+  errorMessage: string = '';
 
-  constructor(private sharedService: SharedService, private apiService: ApiService, private tspService: TspService) {
-    this.auth_token = this.sharedService.auth_token;
-    this.locations = this.sharedService.locations;
-  }
+  constructor(private sharedService: SharedService, private tspService: TspService) {}
 
   ngOnInit(): void {
-    // this.getLocations();
+    this.locations = this.sharedService.locations;
   }
 
   ngAfterViewInit(): void {
     this.createChart();
   }
 
-  getLocations(): void {
-    this.apiService.getLocations(this.auth_token)
-      .subscribe(locations => this.locations = locations);
+  createScalesAndSvg(): void {
+    const element = this.chartContainer.nativeElement;
+    this.x = d3.scaleLinear().domain([0, 1000]).range([0, 500]);
+    this.y = d3.scaleLinear().domain([0, 1000]).range([500, 0]);
+    this.svg = d3.select(element).append('svg').attr('width', '500').attr('height', '500');
   }
 
   createChart(): void {
-    const element = this.chartContainer.nativeElement;
+    this.createScalesAndSvg();
     const data = this.locations.data.map(location => ({ id: location.id, x: location.x, y: location.y }));
-
-    const svg = d3.select(element).append('svg')
-      .attr('width', '500')
-      .attr('height', '500');
-
-    const x = d3.scaleLinear()
-      .domain([0, 1000])
-      .range([0, 500]);
-
-    const y = d3.scaleLinear()
-      .domain([0, 1000])
-      .range([500, 0]);
-
-    const line = d3.line<any>()
-      .x(d => x(d.x))
-      .y(d => y(d.y));
-
-    svg.selectAll('.dot')
-      .data(data)
-      .enter().append('circle')
-      .attr('class', 'dot')
-      .attr('cx', d => x(d.x))
-      .attr('cy', d => y(d.y))
-      .attr('r', 5);
-    
-    // Add labels
-    svg.selectAll('.text')
-      .data(data)
-      .enter().append('text')
-      .attr('x', d => x(d.x))
-      .attr('y', d => y(d.y))
-      .text(d => d.id)
-      .attr('font-size', '15px')
-      .attr('dx', '10px')
-      .attr('dy', '-10px');
+    this.plotData(data);
   }
 
   tsp(timeLimit: string, maxGen : string, p : string, pe : string, pm : string, rho : string, maxLocalSearchImprov : string, warmStart : boolean) : void {
     if (Number(timeLimit) == 0 && Number(maxGen) == 0) {
-      alert("Either time limit or max generations must be greater than 0");
+      this.errorMessage = "Either time limit or max generations must be greater than 0";
       return;
     }
 
     this.routeLength = 0;
-    let result = this.tspService.solve(this.locations.data, Number(timeLimit), Number(maxGen), Number(p), Number(pe), Number(pm), Number(rho), Number(maxLocalSearchImprov), warmStart);
-    this.routeLength = result[0];
-    let solution = result[1];
+    let [routeLength, solution, elapsedTime, gen] = this.tspService.solve(this.locations.data, Number(timeLimit), Number(maxGen), Number(p), Number(pe), Number(pm), Number(rho), Number(maxLocalSearchImprov), warmStart);
+    this.routeLength = routeLength;
     solution.push(solution[0]);
-    this.elapsedTime = result[2];
-    this.gen = result[3];
+    this.elapsedTime = elapsedTime;
+    this.gen = gen;
 
-    const element = this.chartContainer.nativeElement;
     const data = solution.map(location => ({ id: location.id, x: location.x, y: location.y }));
 
-    d3.select(element).select('svg').remove();
+    d3.select('svg').remove();
+    this.createScalesAndSvg();
+    this.plotData(data, true);
+  }
 
-    const svg = d3.select(element).append('svg')
-      .attr('width', '500')
-      .attr('height', '500');
+  plotData(data: {id: number, x: number, y: number}[], plotEdges: boolean = false) {
+    const line = d3.line<{id: number, x: number, y: number}>()
+      .x(d => this.x(d.x))
+      .y(d => this.y(d.y));
 
-    const x = d3.scaleLinear()
-      .domain([0, 1000])
-      .range([0, 500]);
+    if (plotEdges) {
+      this.svg.append('path')
+        .datum(data)
+        .attr('fill', 'none')
+        .attr('stroke', 'steelblue')
+        .attr('stroke-width', 1.5)
+        .attr('d', line);
+    }
 
-    const y = d3.scaleLinear()
-      .domain([0, 1000])
-      .range([500, 0]);
-
-    const line = d3.line<any>()
-      .x(d => x(d.x))
-      .y(d => y(d.y));
-
-    svg.append('path')
-      .datum(data)
-      .attr('fill', 'none')
-      .attr('stroke', 'steelblue')
-      .attr('stroke-width', 1.5)
-      .attr('d', line);
-
-    svg.selectAll('.dot')
+    this.svg.selectAll('.dot')
       .data(data)
       .enter().append('circle')
       .attr('class', 'dot')
-      .attr('cx', d => x(d.x))
-      .attr('cy', d => y(d.y))
+      .attr('cx', d => this.x(d.x))
+      .attr('cy', d => this.y(d.y))
       .attr('r', 5);
 
     // Add labels
-    svg.selectAll('.text')
+    this.svg.selectAll('.text')
       .data(data)
       .enter().append('text')
-      .attr('x', d => x(d.x))
-      .attr('y', d => y(d.y))
+      .attr('x', d => this.x(d.x))
+      .attr('y', d => this.y(d.y))
       .text(d => d.id)
       .attr('font-size', '15px')
       .attr('dx', '10px')

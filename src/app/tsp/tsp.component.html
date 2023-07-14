@@ -1,32 +1,49 @@
-<h2>Algorithm parameters</h2>
-<label for="timeLimit">Time limit: </label>
-<input type="number" id="timeLimit" min="0" value="60" #timeLimit /> s (0 means no limit)
-<br />
-<label for="maxGen">Maximum generations: </label>
-<input type="number" id="maxGen" min="0" value="10000" #maxGen /> (0 means no limit)
-<br />
-<label for="population">Population size: </label>
-<input type="number" id="population" min="0" value="250" #p />
-<br />
-<label for="elite">Elite set size: </label>
-<input type="number" id="elite" min="0" max="1" step="0.01" value="0.15" #pe />
-<br />
-<label for="mutants">Mutant set size: </label>
-<input type="number" id="mutants" min="0" max="1" step="0.01" value="0.20" #pm />
-<br />
-<label for="crossover">Crossover probability: </label>
-<input type="number" id="crossover" min="0" max="1" step="0.01" value="0.67" #rho />
-<br />
-<label for="maxLocalSearchImprov">Maximum local search improvments: </label>
-<input type="number" id="maxLocalSearchImprov" min="0" value="25" #maxLocalSearchImprov />
-<br />
-<label for="warmStart">Warm start: </label>
-<input type="checkbox" id="warmStart" checked #warmStart />
-<br />
-<button type="button" class="tsp-button" title="Calculate route" (click)="tsp(timeLimit.value, maxGen.value, p.value, pe.value, pm.value, rho.value, maxLocalSearchImprov.value, warmStart.checked);">Calculate route</button>
-<div #chart></div>
-<div *ngIf="routeLength > 0">
-  Route length: {{ routeLength }} <br />
-  Generations evolved: {{ gen }} <br />
-  Time elapsed: {{ elapsedTime }} s <br />
+<div class="algorithm-container">
+  <h2>Algorithm parameters</h2>
+  <form #tspForm="ngForm" (ngSubmit)="tsp(timeLimit.value, maxGen.value, p.value, pe.value, pm.value, rho.value, maxLocalSearchImprov.value, warmStart.checked);">
+    <div class="form-group">
+      <label for="timeLimit">Time limit: </label>
+      <input type="number" id="timeLimit" min="0" value="60" #timeLimit required />
+      <span>s (0 means no limit)</span>
+    </div>
+    <div class="form-group">
+      <label for="maxGen">Maximum generations: </label>
+      <input type="number" id="maxGen" min="0" value="10000" #maxGen required />
+      <span>(0 means no limit)</span>
+    </div>
+    <div class="form-group">
+      <label for="population">Population size: </label>
+      <input type="number" id="population" min="0" value="250" #p required />
+    </div>
+    <div class="form-group">
+      <label for="elite">Elite set size: </label>
+      <input type="number" id="elite" min="0" max="1" step="0.01" value="0.15" #pe required />
+    </div>
+    <div class="form-group">
+      <label for="mutants">Mutant set size: </label>
+      <input type="number" id="mutants" min="0" max="1" step="0.01" value="0.20" #pm required />
+    </div>
+    <div class="form-group">
+      <label for="crossover">Crossover probability: </label>
+      <input type="number" id="crossover" min="0" max="1" step="0.01" value="0.67" #rho required />
+    </div>
+    <div class="form-group">
+      <label for="maxLocalSearchImprov">Maximum local search improvments: </label>
+      <input type="number" id="maxLocalSearchImprov" min="0" value="25" #maxLocalSearchImprov required />
+    </div>
+    <div class="form-group">
+      <label for="warmStart">Warm start: </label>
+      <input type="checkbox" id="warmStart" checked #warmStart />
+    </div>
+    <div class="form-group">
+      <button type="submit" class="tsp-button" title="Calculate route" (click)="tsp(timeLimit.value, maxGen.value, p.value, pe.value, pm.value, rho.value, maxLocalSearchImprov.value, warmStart.checked);">Calculate route</button>
+    </div>
+  </form>
+  <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+  <div #chart class="chart-container"></div>
+  <div class="result" *ngIf="routeLength > 0">
+    <span>Route length: {{ routeLength }}</span>
+    <span>Generations evolved: {{ gen }}</span>
+    <span>Time elapsed: {{ elapsedTime }} s</span>
+  </div>
 </div>
