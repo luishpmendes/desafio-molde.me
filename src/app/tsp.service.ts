@@ -220,7 +220,7 @@ export class TspService {
 
   // Public method to solve the TSP problem given a list of locations and algorithm parameters
   // It constructs the distance matrix, runs the BRKGA algorithm, and returns the best solution found along with its fitness
-  solve(locations: Location[], timeLimit: number, maxGen: number, p: number, pe: number, pm: number, rho: number, k: number, maxLocalSearchImprov: number, warmStart: boolean): [number, Location[], number, number] {
+  solve(locations: Location[], timeLimit: number, maxGen: number, p: number, pe: number, pm: number, rho: number, k: number, m: number, genExchange: number, maxLocalSearchImprov: number, warmStart: boolean): [number, Location[], number, number] {
     // Record the start time of the algorithm
     let startTime = new Date().getTime();
 
@@ -273,6 +273,12 @@ export class TspService {
       // Evolve the population to the next generation
       algorithm.evolve();
       gen++;
+
+      // If the exchange interval is reached
+      if (m > 0 && genExchange > 0 && gen % genExchange == 0) {
+        // Exchange top m chromosomes between populations
+        algorithm.exchangeElite(m);
+      }
     }
 
     let bestFitness = algorithm.getBestFitness();
