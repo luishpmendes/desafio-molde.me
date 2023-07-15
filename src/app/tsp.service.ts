@@ -220,7 +220,7 @@ export class TspService {
 
   // Public method to solve the TSP problem given a list of locations and algorithm parameters
   // It constructs the distance matrix, runs the BRKGA algorithm, and returns the best solution found along with its fitness
-  solve(locations: Location[], timeLimit: number, maxGen: number, p: number, pe: number, pm: number, rho: number, maxLocalSearchImprov: number, warmStart: boolean): [number, Location[], number, number] {
+  solve(locations: Location[], timeLimit: number, maxGen: number, p: number, pe: number, pm: number, rho: number, k: number, maxLocalSearchImprov: number, warmStart: boolean): [number, Location[], number, number] {
     // Record the start time of the algorithm
     let startTime = new Date().getTime();
 
@@ -240,7 +240,7 @@ export class TspService {
     // Create the decoder for interpreting BRKGA's chromosome representation
     let decoder = new Decoder(locations, dist, maxLocalSearchImprov, startTime, timeLimit);
     // Initialize the BRKGA algorithm
-    let algorithm = new BRKGA(locations.length - 1, p, pe, pm, rho, decoder);
+    let algorithm = new BRKGA(locations.length - 1, p, pe, pm, rho, decoder, k);
     // Track the number of generations
     let gen = 0;
 
@@ -262,8 +262,10 @@ export class TspService {
       let mstCycle = TspService.mst2Approx(locations.length, edges);
       let mstChromosome = Decoder.encodeNewChromosome(mstCycle);
 
-      // Inject these chromosomes into the initial population
-      algorithm.injectChromosomes([greedyChromosome, mstChromosome], 0);
+      // Inject these chromosomes into the initial populations
+      for (let i = 0; i < k; i++) {
+        algorithm.injectChromosomes([greedyChromosome, mstChromosome], i);
+      }
     }
 
     // Run the algorithm until termination criteria are met (time limit or generation count)
@@ -273,10 +275,14 @@ export class TspService {
       gen++;
     }
 
+    let bestFitness = algorithm.getBestFitness();
+    let bestChromosome = algorithm.getBestChromosome();
+    let bestSolution = decoder.getSolution(bestChromosome);
+
     // Calculate elapsed time of the algorithm
     let elapsedTime = (new Date().getTime() - startTime) / 1000;
 
     // Return the best solution found, its fitness, the elapsed time, and the number of generations
-    return [algorithm.getBestFitness(), decoder.getSolution(algorithm.getBestChromosome()), elapsedTime, gen];
+    return [bestFitness, bestSolution, elapsedTime, gen];
   }
 }
