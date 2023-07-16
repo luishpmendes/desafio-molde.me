@@ -2,9 +2,9 @@
   <h2>Algorithm parameters</h2>
   <form #tspForm="ngForm" (ngSubmit)="tsp(timeLimit.value, maxGen.value, p.value, pe.value, pm.value, rho.value, k.value, m.value, genExchange.value, maxLocalSearchImprov.value, warmStart.checked);">
     <div class="form-group">
-      <label for="timeLimit">Time limit: </label>
+      <label for="timeLimit">Time limit (in seconds): </label>
       <input type="number" id="timeLimit" min="0" value="60" #timeLimit required />
-      <span>s (0 means no limit)</span>
+      <span>(0 means no limit)</span>
     </div>
     <div class="form-group">
       <label for="maxGen">Maximum generations: </label>
@@ -34,10 +34,12 @@
     <div class="form-group">
       <label for="m">Number of individuals to exchange: </label>
       <input type="number" id="m" min="0" value="10" #m required />
+      <span>(0 means no exchange)</span>
     </div>
     <div class="form-group">
       <label for="genExchange">Number of generations between exchanges: </label>
       <input type="number" id="genExchange" min="0" value="100" #genExchange required />
+      <span>(0 means no exchange)</span>
     </div>
     <div class="form-group">
       <label for="maxLocalSearchImprov">Maximum local search improvments: </label>

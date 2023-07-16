@@ -59,8 +59,10 @@ export class TSPComponent implements AfterViewInit {
   tsp(timeLimit: string, maxGen : string, p : string, pe : string, pm : string, rho : string, k : string, m : string, genExchange : string, maxLocalSearchImprov : string, warmStart : boolean) : void {
     // Check for valid input, either time limit or max generations must be greater than 0
     if (Number(timeLimit) == 0 && Number(maxGen) == 0) {
-      this.errorMessage = "Either time limit or max generations must be greater than 0";
+      this.errorMessage = "Either time limit or max generations must be greater than 0!";
       return;
+    } else {
+      this.errorMessage = "";
     }
 
     this.routeLength = 0;
@@ -95,8 +97,8 @@ export class TSPComponent implements AfterViewInit {
       this.svg.append('path')
         .datum(data)
         .attr('fill', 'none')
-        .attr('stroke', 'steelblue')
-        .attr('stroke-width', 1.5)
+        .attr('stroke', 'green')
+        .attr('stroke-width', 2)
         .attr('d', line);
     }
 
@@ -107,7 +109,8 @@ export class TSPComponent implements AfterViewInit {
       .attr('class', 'dot')
       .attr('cx', d => this.x(d.x))
       .attr('cy', d => this.y(d.y))
-      .attr('r', 5);
+      .attr('r', 4)
+      .attr('fill', 'red');
 
     // Add labels to the data points
     this.svg.selectAll('.text')
@@ -116,9 +119,10 @@ export class TSPComponent implements AfterViewInit {
       .attr('x', d => this.x(d.x))
       .attr('y', d => this.y(d.y))
       .text(d => d.id)
-      .attr('font-size', '15px')
+      .attr('font-size', '12px')
       .attr('dx', '10px')
-      .attr('dy', '-10px');
+      .attr('dy', '-10px')
+      .attr('fill', 'blue');
   }
 
   get locations() {
