@@ -24,17 +24,6 @@ h2 {
   margin-bottom: 15px;
 }
 
-/* label {
-  font-size: 1.2em;
-  font-weight: 500;
-} */
-
-/* input[type="number"], 
-input[type="checkbox"] {
-  width: auto;
-  margin: 5px 0;
-} */
-
 .tsp-button {
   background-color: #4CAF50;
   color: white;
@@ -43,29 +32,6 @@ input[type="checkbox"] {
 .tsp-button:hover {
   background-color: #45a049;
 }
-
-/* .tsp-button {
-  background-color: #4CAF50;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  text-align: center;
-  font-size: 1em;
-  transition-duration: 0.4s;
-  cursor: pointer;
-}
-
-.tsp-button:hover {
-  background-color: #45a049;
-} */
-
-/* .error-message {
-  color: red;
-  font-weight: bold;
-  text-align: center;
-  margin-top: 10px;
-} */
 
 .chart-container {
   margin-top: 20px;
@@ -102,5 +68,3 @@ svg path {
   stroke-width: 1.5;
   fill: none;
 }
-
-

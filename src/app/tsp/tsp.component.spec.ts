@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TspComponent } from './tsp.component';
+import { TSPComponent } from './tsp.component';
 
-describe('TspComponent', () => {
-  let component: TspComponent;
-  let fixture: ComponentFixture<TspComponent>;
+describe('TSPComponent', () => {
+  let component: TSPComponent;
+  let fixture: ComponentFixture<TSPComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TspComponent]
+      declarations: [TSPComponent]
     });
-    fixture = TestBed.createComponent(TspComponent);
+    fixture = TestBed.createComponent(TSPComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

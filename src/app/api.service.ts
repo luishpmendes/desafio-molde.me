@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { of, range, Observable } from 'rxjs';
-import { concatMap, mergeMap, toArray, map, tap } from 'rxjs/operators';
+import { concatMap, mergeMap, toArray, tap } from 'rxjs/operators';
 // Import the Locations iterface from the same directory
 import { Locations } from './locations';
 import { Location } from './location';

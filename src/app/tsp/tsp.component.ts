@@ -52,7 +52,6 @@ export class TSPComponent implements AfterViewInit {
   createChart(): void {
     this.createScalesAndSvg();
     // Preparing the data for the chart
-    // const data = this.locations.data.map(location => ({ id: location.id, x: location.x, y: location.y }));
     this.plotData(this.sharedService.locations);
   }
 
