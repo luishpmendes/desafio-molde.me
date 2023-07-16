@@ -1,7 +1,7 @@
 <section aria-label="Location Data">
   <h2>Locations</h2>
 
-  <ng-container *ngIf="locations?.data as locationData; else noLocations">
+  <ng-container *ngIf="locations as hasLocations; else noLocations">
     <table>
       <caption class="sr-only">Locations data table</caption>
       <thead>
@@ -13,7 +13,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let location of locations?.data; trackBy: trackById">
+        <tr *ngFor="let location of locations; trackBy: trackById">
           <td>{{ location.id }}</td>
           <td>{{ location.x }}</td>
           <td>{{ location.y }}</td>

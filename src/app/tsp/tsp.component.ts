@@ -22,7 +22,6 @@ export class TSPComponent implements AfterViewInit {
   private chartContainer!: ElementRef;
 
   // Declaring component properties
-  locations: Locations = {} as Locations;
   routeLength: number = 0;
   elapsedTime: number = 0;
   gen: number = 0;
@@ -31,9 +30,7 @@ export class TSPComponent implements AfterViewInit {
   y!: ScaleLinear<number, number>;
   errorMessage: string = '';
 
-  constructor(private sharedService: SharedService, private tspService: TspService) {
-    this.locations = this.sharedService.locations;
-  }
+  constructor(private sharedService: SharedService, private tspService: TspService) {}
 
   // ngAfterViewInit lifecycle hook method, called after Angular has fully initialized a component's view
   ngAfterViewInit(): void {
@@ -55,8 +52,8 @@ export class TSPComponent implements AfterViewInit {
   createChart(): void {
     this.createScalesAndSvg();
     // Preparing the data for the chart
-    const data = this.locations.data.map(location => ({ id: location.id, x: location.x, y: location.y }));
-    this.plotData(data);
+    // const data = this.locations.data.map(location => ({ id: location.id, x: location.x, y: location.y }));
+    this.plotData(this.sharedService.locations);
   }
 
   // Method to solve TSP problem with various parameters
@@ -69,7 +66,7 @@ export class TSPComponent implements AfterViewInit {
 
     this.routeLength = 0;
     // Get solution from tspService
-    let [routeLength, solution, elapsedTime, gen] = this.tspService.solve(this.locations.data, Number(timeLimit), Number(maxGen), Number(p), Number(pe), Number(pm), Number(rho), Number(k), Number(m), Number(genExchange), Number(maxLocalSearchImprov), warmStart);
+    let [routeLength, solution, elapsedTime, gen] = this.tspService.solve(this.sharedService.locations, Number(timeLimit), Number(maxGen), Number(p), Number(pe), Number(pm), Number(rho), Number(k), Number(m), Number(genExchange), Number(maxLocalSearchImprov), warmStart);
     this.routeLength = routeLength;
     // Ensure the solution is a loop, ending where it started
     solution.push(solution[0]);
@@ -123,5 +120,9 @@ export class TSPComponent implements AfterViewInit {
       .attr('font-size', '15px')
       .attr('dx', '10px')
       .attr('dy', '-10px');
+  }
+
+  get locations() {
+    return this.sharedService.locations;
   }
 }

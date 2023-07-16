@@ -1,7 +1,7 @@
 // Angular core module import, to use the Injectable decorator.
 import { Injectable } from '@angular/core';
-// Local import of the Locations model/interface.
-import { Locations } from './locations';
+// Local import of the Location interface.
+import { Location } from './location';
 
 // Injectable decorator is used to mark a class as available to be provided and injected as a dependency.
 @Injectable({
@@ -21,7 +21,6 @@ export class SharedService {
   // String to store authentication token received from backend API.
   auth_token = '';
 
-  // Instance of Locations, initially assigned with an empty object.
-  // Stores location information and should follow the structure defined in the Locations interface.
-  locations: Locations = {} as Locations;
+  // Array of Location objects to store locations received from backend API.
+  locations: Array<Location> = [];
 }

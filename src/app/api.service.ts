@@ -1,9 +1,11 @@
 // Import the required modules from Angular's core, http client, and rxjs library.
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { of, range, Observable } from 'rxjs';
+import { concatMap, mergeMap, toArray, map, tap } from 'rxjs/operators';
 // Import the Locations iterface from the same directory
 import { Locations } from './locations';
+import { Location } from './location';
 
 // This decorator marks the class as one that participates in the dependency injection system.
 @Injectable({
@@ -13,6 +15,10 @@ import { Locations } from './locations';
 export class ApiService {
   // API base URL
   private apiUrl = 'https://recrutamento.molde.me';
+  // Total number of pages of data
+  private totalPages = 0;
+  // First page of data
+  private firstPageData: Location[] = [];
 
   // Inject HttpClient into our service
   constructor(private http: HttpClient) { }
@@ -33,8 +39,35 @@ export class ApiService {
   }
 
   // This method sends a GET request to the location endpoint to retrieve all locations.
-  getLocations(auth_token: string): Observable<Locations> {
-    return this.http.get<Locations>(`${this.apiUrl}/location`, this.getHttpOptions(auth_token));
+  getLocations(auth_token: string): Observable<Location[]> {
+    let httpOptions = this.getHttpOptions(auth_token);
+    httpOptions.headers.set('sort', 'id');
+    httpOptions.headers.set('order', 'asc');
+    httpOptions.headers.set('page', '1');
+  
+    return this.http.get<Locations>(`${this.apiUrl}/location`, httpOptions).pipe(
+      // store the first page of data and the total number of pages
+      tap(locations => {
+        this.totalPages = locations.pages;
+        this.firstPageData = locations.data;
+      }),
+      // use the total number of pages to create a list of the remaining page numbers (if any)
+      concatMap(locations => locations.pages > 1 ? range(2, locations.pages - 1) : of(null)),
+      // map each page number to a GET request
+      mergeMap(pageNumber => {
+        if (pageNumber) {
+          httpOptions.headers.set('page', pageNumber.toString());
+          return this.http.get<Locations>(`${this.apiUrl}/location`, httpOptions);
+        } else {
+          // if there's only one page, return the first page data as a single-element Observable
+          return of({data: this.firstPageData} as Locations);
+        }
+      }),
+      // merge all the returned Location arrays into one array
+      mergeMap(locations => locations.data),
+      // accumulate all the emitted values into a single array
+      toArray()
+    );
   }
 
   // This method sends a POST request to the location endpoint to add a new location.

@@ -44,7 +44,10 @@ export class LocationListComponent implements OnInit {
     this.apiService.getLocations(this.sharedService.auth_token)
       .subscribe({
         // If successful, store the locations in sharedService
-        next: locations => this.sharedService.locations = locations,
+        next: locations => {
+          locations.sort((a: Location, b: Location) => a.id - b.id);
+          this.sharedService.locations = locations;
+        },
         // If an error occurs, log it to the console
         error: error => console.error('There was an error!', error)
       });
@@ -68,7 +71,7 @@ export class LocationListComponent implements OnInit {
   // Method to add the location to the shared service and reset the form
   addLocation(location: any): void {
     // Push the location to the shared service's locations data array
-    this.sharedService.locations.data.push(location);
+    this.sharedService.locations.push(location);
     // Reset the form to its initial state
     this.addLocationForm.reset();
   }
@@ -87,7 +90,7 @@ export class LocationListComponent implements OnInit {
   // Method to filter the deleted location out of the locations list
   filterLocations(id: number): void {
     // Reassign the locations data array to a new array that doesn't include the deleted location
-    this.sharedService.locations.data = this.sharedService.locations.data.filter(l => l.id !== id)
+    this.sharedService.locations = this.sharedService.locations.filter(l => l.id !== id)
   }
 
   // Method to navigate to the '/tsp' route
