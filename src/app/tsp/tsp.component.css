@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   margin: auto;
-  width: 60%;
+  width: 100%;
   padding: 20px;
   background-color: #f2f2f2;
   border-radius: 8px;
@@ -52,19 +52,4 @@ h2 {
 .result span {
   font-size: 1.2em;
   margin: 5px 0;
-}
-
-.dot {
-  fill: steelblue;
-}
-
-text {
-  fill: black;
-  font-family: Arial, sans-serif;
-}
-
-svg path {
-  stroke: steelblue;
-  stroke-width: 1.5;
-  fill: none;
 }

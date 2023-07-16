@@ -1,13 +1,13 @@
 h2, h3 {
-  color: #444;
-  padding: 10px;
+  color: var(--dark-gray-color);
   margin-bottom: 20px;
+  padding: 10px;
 }
 
 table {
-  width: 100%;
   border-collapse: collapse;
   box-shadow: 0px 0px 5px 0px #888888;
+  width: 100%;
 }
 
 table, th, td {
@@ -16,8 +16,8 @@ table, th, td {
 }
 
 th {
-  background-color: #536DFE;
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--white-color);
 }
 
 tr:nth-child(even) {
@@ -29,23 +29,24 @@ tr:hover {
 }
 
 .delete-button, .tsp-button, .add-button {
+  background-color: var(--primary-color);
   border: none;
   border-radius: 3px;
-  padding: 10px 20px;
-  margin: 10px 0;
-  color: white;
-  font-size: 0.9rem;
+  color: var(--white-color);
   cursor: pointer;
-  width: 100%;
+  font-size: 0.9rem;
+  margin: 10px 0;
+  padding: 10px 20px;
   transition: 0.3s;
+  width: 100%;
 }
 
 .delete-button {
-  background-color: #FF5252;
+  background-color: var(--error-color);
 }
 
 .tsp-button {
-  background-color: #536DFE;
+  background-color: var(--primary-color);
 }
 
 .add-button {
@@ -53,18 +54,18 @@ tr:hover {
 }
 
 .delete-button:hover, .tsp-button:hover, .add-button:hover {
-  transform: scale(1.05);
+  transform: scale(var(--button-hover-scale));
 }
 
 .add-button:disabled {
-  background-color: #cccccc;
+  background-color: var(--disabled-color);
   cursor: not-allowed;
 }
 
 section {
+  background-color: var(--white-color);
+  border-radius: var(--button-radius);
+  box-shadow: 0px 0px 5px 0px #888888;
   margin: 20px;
   padding: 20px;
-  background-color: white;
-  border-radius: 5px;
-  box-shadow: 0px 0px 5px 0px #888888;
 }
